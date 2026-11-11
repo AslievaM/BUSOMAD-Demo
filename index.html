@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1B16">
+<title>Rasid · live buses</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#0E1B16;--panel:#13241D;--line:#264236;--text:#F2F6F3;--mut:#9DB4A8;--accent:#F2A900;--ok:#4CC38A;--bad:#FF6B5E;--blue:#6CB7FF}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+#map{position:fixed;inset:0 0 var(--sheet,260px) 0}
+#sheet{position:fixed;left:0;right:0;bottom:0;height:var(--sheet,260px);background:var(--panel);border-top:1px solid var(--line);display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+#top{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;gap:8px;align-items:center;padding:8px 12px;background:linear-gradient(var(--bg),transparent);pointer-events:none}
+#top>*{pointer-events:auto}
+.brand{font-weight:700;letter-spacing:.02em}
+.brand b{color:var(--accent)}
+#conn{margin-left:auto;font-size:12px;color:var(--mut);display:flex;align-items:center;gap:6px;background:var(--panel);padding:4px 10px;border-radius:99px;border:1px solid var(--line)}
+#conn i{width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block}
+#conn.on i{background:var(--ok)}
+#lang{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;font-size:12px}
+nav{display:flex;border-bottom:1px solid var(--line)}
+nav button{flex:1;background:none;border:0;color:var(--mut);padding:11px 4px;font:inherit;font-weight:600;border-bottom:3px solid transparent;cursor:pointer}
+nav button.on{color:var(--text);border-bottom-color:var(--accent)}
+.pane{display:none;overflow:auto;padding:12px 14px;flex:1}
+.pane.on{display:block}
+h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+label{display:block;font-size:12px;color:var(--mut);margin-top:8px}
+input,select{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+button.btn{background:var(--accent);color:#1a1200;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}
+button.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+button.btn.stop{background:var(--bad);color:#fff}
+button.btn:disabled{opacity:.5}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 4px;font:inherit;cursor:pointer}
+.seg button.on{border-color:var(--accent);background:#2a2208;color:var(--accent);font-weight:700}
+.chip{display:inline-block;min-width:34px;text-align:center;padding:2px 8px;border-radius:8px;font-weight:800;color:#13241D}
+.card{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 8px;background:var(--bg)}
+.card .t{display:flex;align-items:center;gap:8px}
+.card .sub{color:var(--mut);font-size:13px;margin-top:2px}
+.eta{margin-left:auto;font-weight:800;font-size:18px}
+.st-late,.st-slow{color:var(--bad)}.st-early,.st-fast{color:var(--blue)}.st-ontime{color:var(--ok)}.st-unknown{color:var(--mut)}
+.mut{color:var(--mut);font-size:13px}
+.msg{margin:8px 0;padding:8px 10px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:13px}
+.msg.err{border-color:var(--bad);color:var(--bad)}
+.busicon{width:34px;height:34px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#13241D;box-shadow:0 2px 6px #0008}
+.busicon.stale{opacity:.45}
+.me{width:16px;height:16px;border-radius:50%;background:#2d7fff;border:3px solid #fff;box-shadow:0 0 0 6px #2d7fff44}
+.rider{width:10px;height:10px;border-radius:50%;background:#2d7fff;border:2px solid #fff}
+.leaflet-container{background:#cfd8d3}
+</style>
+</head>
+<body>
+<div id="top"><div class="brand">RAS<b>I</b>D</div><select id="lang"><option value="en">EN</option><option value="ru">RU</option><option value="tg">ТҶ</option></select><div id="conn"><i></i><span id="connTxt">…</span></div></div>
+<div id="map"></div>
+<div id="sheet">
+  <nav><button data-tab="routes" class="on" id="tabRoutes"></button><button data-tab="share" id="tabShare"></button><button data-tab="rec" id="tabRec"></button></nav>
+  <div class="pane on" id="paneRoutes"></div>
+  <div class="pane" id="paneShare"></div>
+  <div class="pane" id="paneRec"></div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
